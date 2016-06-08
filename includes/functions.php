@@ -20,3 +20,12 @@ function output_message($message='') {
         return '';
     }
 }
+
+function __autoload($classname) {
+    $path = __DIR__.'/../class/'.$classname.'.php';
+    if (file_exists($path)) {
+        require_once $path;
+    } else {
+        die ("Файл {$classname}.php не найден.");
+    }
+}
