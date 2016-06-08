@@ -29,3 +29,7 @@ function __autoload($classname) {
         die ("Файл {$classname}.php не найден.");
     }
 }
+
+function include_layout_template($template) {
+    include __DIR__ . '/../public/layouts/'.$template;
+}
