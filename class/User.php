@@ -1,6 +1,8 @@
 <?php
-require_once '../includes/functions.php';
-class User   {
+require_once __DIR__.'/../includes/functions.php';
+//require_once('../../includes/functions.php');
+class User
+            extends  AbstractModel{
     public $id;
     public $username;
     public $password;
@@ -10,42 +12,11 @@ class User   {
     protected static $_table = 'users';
 
 
-    public static function getTable() {
-        return self::$_table;
-    }
 
-    public static function findAll() {
-        $db = PDODatabase::getInstance();
+    public static function authenticate($username='', $password='') {
 
-        $db->setClassname(get_called_class());
-        $sql = "SELECT * FROM " . self::$_table;
-        return $db->queryFetchAll($sql);
-    }
-
-    public static function findOne(array $data) {
-        if(empty($data)) {
-            return false;
-        }
-        $db = PDODatabase::getInstance();
-        $db->setClassname(get_called_class());
-        $param = [];
-        $data_param = [];
-        foreach ($data as $key => $val) {
-            $param[] = $key. '=:'.$key;
-            $data_param[':'.$key] = $val;
-        }
-
-        $sql = 'SELECT * FROM ' . self::$_table . ' WHERE ' . $param[0] ;
-        if (isset($param[1])) {
-            $sql .= ' AND ' . $param[1];
-        }
-        $sql .= ' LIMIT 1';
-        return $db->prepareFetch($sql, $data_param);
-    }
-
-    public static function findByIdPk($id=0) {
-        $data = ['id'=>$id];
-        return self::findOne($data);
+        $found_user = self::findOne(['username'=>$username, 'password'=>$password ]);
+        return $found_user;
     }
 
     public function fullName() {
@@ -59,14 +30,15 @@ class User   {
 
 
 }
-try{
-    $user = new User();
-    var_dump($record=User::findAll());
-    var_dump($d = User::findOne([]));
-    var_dump($d = User::findByIdPk(1));
-    //echo $d->id;
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
-
-print_r( User::findByIdPk(1));
+//try{
+//    $user = new User();
+//    var_dump($record=User::findAll());
+//    var_dump($d = User::findOne([]));
+//    var_dump($d = User::findByIdPk(1));
+//    //echo $d->id;
+//} catch (Exception $e) {
+//    echo $e->getMessage();
+//}
+//
+//print_r( User::findByIdPk(1));
+//var_dump(User::authenticate());

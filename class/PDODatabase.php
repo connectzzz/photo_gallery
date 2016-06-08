@@ -43,13 +43,17 @@ class PDODatabase {
     public  function queryFetchAll($sql) {
 
         $stmt = $this->_db->query($sql);
+        if (!$stmt) {die('Запрос к БД завершился ошибкой. Последний запрос: '.$sql);}
         return $stmt->fetchAll(PDO::FETCH_CLASS,$this->classname);
     }
 
     public function prepareFetch($sql, array $data) {
 
         $stmt = $this->_db->prepare($sql);
-        $stmt->execute($data);
+        //@todo if (!$stmt) {die('Запрос к БД завершился ошибкой. Последний запрос: '.$sql);}
+        // @todo не возвращает false
+        $res = $stmt->execute($data);
+        if (!$res) {die('Запрос к БД завершился ошибкой. Последний запрос: '.$sql);}
         $stmt->setFetchMode(PDO::FETCH_CLASS, $this->classname);
         return $stmt->fetch();
 
