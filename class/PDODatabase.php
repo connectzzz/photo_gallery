@@ -40,6 +40,10 @@ class PDODatabase {
         $this->classname = $classname;
     }
 
+    public function lastInsertId($name=null) {
+        return $this->_db->lastInsertId($name);
+    }
+
     public  function queryFetchAll($sql) {
 
         $stmt = $this->_db->query($sql);
@@ -47,13 +51,24 @@ class PDODatabase {
         return $stmt->fetchAll(PDO::FETCH_CLASS,$this->classname);
     }
 
-    public function prepareFetch($sql, array $data) {
+    /**
+     * @param string $sql
+     * @param array $data
+     * @return PDOStatement
+     */
+    public function prepareQuery($sql, array $data) {
 
         $stmt = $this->_db->prepare($sql);
         //@todo if (!$stmt) {die('Запрос к БД завершился ошибкой. Последний запрос: '.$sql);}
         // @todo не возвращает false
         $res = $stmt->execute($data);
         if (!$res) {die('Запрос к БД завершился ошибкой. Последний запрос: '.$sql);}
+        return $stmt;
+    }
+
+    public function prepareFetch($sql, array $data) {
+
+        $stmt = $this->prepareQuery($sql, $data);
         $stmt->setFetchMode(PDO::FETCH_CLASS, $this->classname);
         return $stmt->fetch();
 
@@ -61,6 +76,8 @@ class PDODatabase {
 
 }
 
-$f = PDODatabase::getInstance();
-$db = $f->getConnection();
-
+//$f = PDODatabase::getInstance();
+////$db = $f->getConnection();
+//$sql ='SHOW  COLUMNS FIELDS FROM users';
+//$res=$f->queryFetchAll($sql);
+//var_dump($res);

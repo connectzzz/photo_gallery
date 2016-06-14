@@ -4,7 +4,7 @@
 abstract class AbstractModel {
 
     protected static $_table;
-
+    public $id;
 
     public static function getTable() {
         return static::$_table;
@@ -42,6 +42,91 @@ abstract class AbstractModel {
     public static function findByIdPk($id=0) {
         $data = ['id'=>$id];
         return self::findOne($data);
+    }
+
+    public static function findByFieldsTable() {
+        $db = PDODatabase::getInstance();
+
+        $sql = "SHOW COLUMNS FROM " . static::$_table;
+        $stmt = $db->prepareQuery($sql, []);
+        $stmt->setFetchMode(PDO::FETCH_COLUMN, 0 );
+        return $stmt->fetchAll();
+
+
+    }
+
+    public function save() {
+        if ($this->id) {
+            return $this->update();
+        } else {
+            return $this->create();
+        }
+    }
+
+    protected function create() {
+        $db = PDODatabase::getInstance();
+        $db->setClassname(get_called_class());
+
+        $fields = static::findByFieldsTable();
+        $sql_fields = [];
+        $data = [];
+        foreach ($fields as $field ) {
+            if (property_exists(get_called_class(), $field)) {
+                $data[':'.$field] = $this->$field;
+               // $sql_fields[] = $field . ' = :' . $field;
+            } else { return 'false';} //@TODO FALSE
+        }
+        $sql = 'INSERT INTO ' . static::$_table ;
+        $sql .= " (" . implode(", ", $fields) . ") ";
+        $sql .= " VALUES (" . implode(", ", array_keys($data)) . ")";
+        //var_dump($sql);var_dump($data);die;
+        $db->prepareQuery($sql, $data);
+        return $db->lastInsertId();
+    }
+
+    protected  function update() {
+        $db = PDODatabase::getInstance();
+        $db->setClassname(get_called_class());
+
+        $fields = static::findByFieldsTable();
+        $sql_fields = [];
+        $data = [];
+        foreach ($fields as $field ) {
+            if (property_exists(get_called_class(), $field)) {
+                $data[':'.$field] = $this->$field;
+                $sql_fields[] = $field . ' = :' . $field;
+            } else { return 'false';} //@TODO FALSE
+        }
+        $sql = 'UPDATE ' . static::$_table ;
+        $sql .= " SET " . implode(", ", $sql_fields);
+        $sql .= " WHERE  id = :id";
+        //var_dump($sql);var_dump($data);die;
+        $stmt = $db->prepareQuery($sql, $data);
+
+        return $stmt->rowCount();
+    }
+
+    public function delete() {
+        $db = PDODatabase::getInstance();
+        $db->setClassname(get_called_class());
+        $data = [':id'=>$this->id];
+        $sql = 'DELETE FROM  ' . static::$_table ;
+        $sql .= " WHERE  id = :id";
+        //var_dump($sql);var_dump($data);die;
+        $stmt = $db->prepareQuery($sql, $data);
+        return $stmt->rowCount();
+    }
+
+    public static function instantiate(array $record) {
+
+        $object = new static;
+        //var_dump($object);
+        foreach($record as $attribute=>$value){
+            if(property_exists($object, $attribute)) {
+                $object->$attribute = $value;
+            }
+        }
+        return $object;
     }
 
 }

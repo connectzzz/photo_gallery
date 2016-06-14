@@ -12,7 +12,11 @@ class User
     protected static $_table = 'users';
 
 
-
+    /**
+     * @param string $username
+     * @param string $password
+     * @return User
+     */
     public static function authenticate($username='', $password='') {
 
         $found_user = self::findOne(['username'=>$username, 'password'=>$password ]);
@@ -30,15 +34,3 @@ class User
 
 
 }
-//try{
-//    $user = new User();
-//    var_dump($record=User::findAll());
-//    var_dump($d = User::findOne([]));
-//    var_dump($d = User::findByIdPk(1));
-//    //echo $d->id;
-//} catch (Exception $e) {
-//    echo $e->getMessage();
-//}
-//
-//print_r( User::findByIdPk(1));
-//var_dump(User::authenticate());
