@@ -2,8 +2,9 @@
 require_once('../../includes/functions.php');
 $session = new Session();
 if (!$session->isLoggedIn()) {redirect_to('login.php');}
-$log = new Logger();
 
+
+$log = new Logger();
 if (isset($_GET['clear'])) {
    $log->clear();
 }

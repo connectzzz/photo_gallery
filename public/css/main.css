@@ -13,7 +13,7 @@ img { border: none; }
 table, tr, td, tr { border-collapse: collapse; vertical-align: top; text-align: left;
     font: 13px/15px Verdana,Arial,Helvetica,sans-serif; }
 a { color: #8D0D19;}
-
+h2 a { color: #000000;}
 #header { height: 70px; text-align: left; background: #1A446C; color: #D4E6F4; }
 #header h1 { padding: 1em; }
 
@@ -24,3 +24,8 @@ a { color: #8D0D19;}
     background: #1A446C;  color: #D4E6F4; }
 
 table.bordered tr th, table.bordered tr td { border: 1px solid #000000; }
+input.error { border-color: red; }
+input {font-size: 1em; height: 2em;  border:1px solid;
+    border-radius: 3px; padding-left: 0.7em;
+}
+div.error {color: #333333; font-style: italic}

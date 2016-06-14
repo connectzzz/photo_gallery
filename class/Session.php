@@ -46,5 +46,9 @@ class Session {
         unset($this->userId);
         $this->loggedIn = false;
     }
+
+    public static function userId() {
+        return $_SESSION['user_id'];
+    }
 }
 

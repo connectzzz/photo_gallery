@@ -13,7 +13,11 @@ if(isset($_POST['submit'])){
     $found_user = User::authenticate($username, $password);
 
     if ($found_user) {
+        //var_dump($found_user);// die;
         $session->login($found_user);
+        $log = new Logger();
+        $log_message = $found_user->username ." logged in.";
+        $log->action('Login', $log_message);
         redirect_to('index.php');
     }else {
         $message = 'Username/password combination incorrect.';
