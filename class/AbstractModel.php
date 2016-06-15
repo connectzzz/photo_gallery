@@ -68,7 +68,7 @@ abstract class AbstractModel {
         $db->setClassname(get_called_class());
 
         $fields = static::findByFieldsTable();
-        $sql_fields = [];
+        //$sql_fields = [];
         $data = [];
         foreach ($fields as $field ) {
             if (property_exists(get_called_class(), $field)) {

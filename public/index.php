@@ -1,23 +1,21 @@
 <?php
 require_once __DIR__ . '/../includes/functions.php';
+$session = new Session();
+
 include_layout_template('header.php');
 
-    $user = User::findByIdPk(1);
-    echo $user->fullName();
-
-    echo "<hr />";
-
-    $users = User::findAll();
-    foreach($users as $user) {
-        echo "User: " . $user->username . "<br />";
-        echo "Name: " . $user->fullName() . "<br /><br />";
-    }
+$photos = Photograph::findAll();
 ?>
+<?= output_message($session->getMessage()) ?>
+<?php foreach ($photos as $photo): ?>
+<div style="float: left; margin: 20px ">
+    <a href="photo.php?id=<?=$photo->id ?>">
+        <img src="<?=$photo->image_path() ?>" alt="<?=$photo->caption ?>" width="250"/>
+    </a>
+    <p align="center"><?=$photo->caption ?></p>
+</div>
 
 
-
-
-
-
-
-<?php include_layout_template('footer.php');
+<?php
+    endforeach;
+    include_layout_template('footer.php');

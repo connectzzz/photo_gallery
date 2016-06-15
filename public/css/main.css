@@ -29,3 +29,7 @@ input {font-size: 1em; height: 2em;  border:1px solid;
     border-radius: 3px; padding-left: 0.7em;
 }
 div.error {color: #333333; font-style: italic}
+ img.photos {width: 100px; }
+ table.photos { border-collapse: collapse; min-width: 600px}
+ table.photos tr,table.photos th, table.photos td  {border: 1px solid  #000000 ; padding: 5px; text-align: center}
+ table.photos  th  {background-color: #934052}

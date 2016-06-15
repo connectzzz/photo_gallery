@@ -36,7 +36,7 @@ class Session {
     public function login($user) {
         // БД найдет user  исходя из логина и пароля
         if($user) {
-            $this->userId = $_SESSION['user_id'] =$user->id;
+            $this->userId = $_SESSION['user_id'] = $user->id;
             $this->loggedIn = true;
         }
     }
@@ -49,6 +49,23 @@ class Session {
 
     public static function userId() {
         return $_SESSION['user_id'];
+    }
+
+    public function setMessage($message='') {
+
+        $_SESSION['message'] = $message;
+    }
+
+    public function getMessage() {
+
+        if(isset($_SESSION['message'])) {
+            $message = $_SESSION['message'];
+            unset ($_SESSION['message']);
+            return $message;
+        } else {
+            return '';
+        }
+
     }
 }
 
